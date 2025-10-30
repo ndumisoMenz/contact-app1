@@ -23,12 +23,17 @@ const HomePage: React.FC = () => {
           {contacts.map((contact: IContact) => <ContactCard key={contact._id} contact={contact} />)}
         </SimpleGrid>
 
-        <Text fontSize='xl' textAlign={"center"} fontWeight='bold' color='gray.500'>
-          No contacts found 😢{" "}
-          <Link to={"/create"}>
-            <Text as='span' color='blue.500' _hover={{ textDecoration: "underline" }}>Create a contact</Text>
-          </Link>
-        </Text>
+        {contacts.length === 0 && (
+          <Text fontSize='xl' textAlign={"center"} fontWeight='bold' color='gray.500'>
+            No contacts found 😢{" "}
+            <Link to={"/create"}>
+              <Text as='span' color='blue.500' _hover={{ textDecoration: "underline" }}>
+                Create a contact
+              </Text>
+            </Link>
+          </Text>
+        )}
+
       </VStack>
     </Container>
   );

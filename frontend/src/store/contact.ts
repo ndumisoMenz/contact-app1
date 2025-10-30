@@ -28,14 +28,34 @@ export const useContactStore = create<ContactStore>((set) => ({
   },
 
   fetchContacts: async () => {
-    try {
-      const res = await fetch(`${API_URL}/api/contacts`);
-      const data = await res.json();
-      set({ contacts: data.data });
-    } catch (err) {
-      console.error("Error fetching contacts:", err);
+  try {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      console.warn("No token found — user might not be logged in");
+      return;
     }
-  },
+
+    const res = await fetch(`${API_URL}/api/contacts`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      console.error("Failed to fetch contacts:", errorData.message);
+      return;
+    }
+
+    const data = await res.json();
+    set({ contacts: data.data });
+  } catch (err) {
+    console.error("Error fetching contacts:", err);
+  }
+},
+
 
   deleteContact: async (cid: string) => {
     try {

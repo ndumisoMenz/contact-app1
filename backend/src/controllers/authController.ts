@@ -49,3 +49,13 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     res.status(500).json({ message: "Something went wrong" });
   }
 };
+
+
+export const logout = async (req: Request, res: Response): Promise<void> => {
+  try {
+    res.status(200).json({ message: "Logged out successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error during logout" });
+  }
+};

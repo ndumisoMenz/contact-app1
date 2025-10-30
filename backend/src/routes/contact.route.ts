@@ -1,13 +1,15 @@
 import express from "express";
-import verifyToken from "../middlewares/authMiddleware";
-import authorizeRoles from "../middlewares/roleMiddleware";
-import { createContact, updateContact, getContacts, deleteContact } from "../controllers/contact.controller";
+import { createContact, updateContact, getContacts,getContactsByRole, deleteContact, getUserContacts } from "../controllers/contact.controller";
+import  authMiddleware  from "../middlewares/authMiddleware";
+
 
 const router = express.Router();
 
-router.get("/",verifyToken,authorizeRoles("admin","user"), getContacts);
-router.post("/",verifyToken,authorizeRoles("admin"), createContact);
-router.put("/:id",verifyToken,authorizeRoles("admin"), updateContact);
-router.delete("/:id",verifyToken,authorizeRoles("admin"), deleteContact);
+//router.get("/", getContacts);
+router.get("/", authMiddleware, getContactsByRole);
+router.post("/",authMiddleware,createContact);
+router.put("/:id", updateContact);
+router.delete("/:id", deleteContact);
+router.get("/:id",getUserContacts)
 
 export default router;
