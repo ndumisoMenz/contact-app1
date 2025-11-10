@@ -17,13 +17,6 @@ const app = express();
 
 app.use(express.json());
 
-
-// app.use(
-//   cors({
-//     origin: "http://localhost:5173",
-//     credentials: true, 
-//   })
-// );
 const allowedOrigins = [
   "http://localhost:5173", // Vite dev server
   "https://contact-app1-ten.vercel.app/" // replace with actual Vercel URL
