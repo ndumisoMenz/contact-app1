@@ -77,7 +77,7 @@ export const createContact = async (
     await newContact.save();
 
     // Add contact reference to user
-    user.contacts.push(newContact._id);
+    user.contacts.push(newContact._id as mongoose.Types.ObjectId);
     await user.save();
 
     res.status(201).json({ success: true, data: newContact });
