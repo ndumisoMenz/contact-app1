@@ -26,7 +26,7 @@ app.use(express.json());
 // );
 const allowedOrigins = [
   "http://localhost:5173", // Vite dev server
-  "https://your-frontend.vercel.app" // replace with actual Vercel URL
+  "https://contact-app1-ten.vercel.app/" // replace with actual Vercel URL
 ];
 
 app.use(cors({
