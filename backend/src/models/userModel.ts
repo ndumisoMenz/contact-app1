@@ -4,8 +4,8 @@ import mongoose, { Document, Model, Schema, Types } from "mongoose";
 export interface IUser extends Document {
   username: string;
   password: string;
-  role: "admin" | "manager" | "user";
-  contacts:Types.ObjectId[];
+  role: "admin" | "user";
+  contacts: Types.ObjectId[];
 }
 
 // Define the Mongoose schema
@@ -23,7 +23,7 @@ const userSchema: Schema<IUser> = new mongoose.Schema(
     role: {
       type: String,
       required: true,
-      enum: ["admin", "manager", "user"],
+      enum: ["admin", "user"],
     },
     contacts: [
       {

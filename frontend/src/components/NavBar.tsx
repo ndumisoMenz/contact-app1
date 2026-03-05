@@ -9,13 +9,13 @@ const NavBar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   const navigate = useNavigate();
 
-  
+
   const logout = useAuthStore((state) => state.logout);
-  const role = useAuthStore((state) => state.role);
+  const { role, token } = useAuthStore();
 
   const handleLogout = () => {
     logout();
-    navigate("/login"); 
+    navigate("/login");
   };
 
   return (
@@ -45,6 +45,14 @@ const NavBar = () => {
             </Text>
           )}
 
+          {role === "admin" && (
+            <Link to="/admin-management">
+              <Button colorScheme="purple" variant="outline" size="sm">
+                Admin Dashboard
+              </Button>
+            </Link>
+          )}
+
           <Link to="/create">
             <Button>
               <PlusSquareIcon fontSize={20} />
@@ -55,7 +63,6 @@ const NavBar = () => {
             {colorMode === "light" ? <IoMoon /> : <LuSun size={20} />}
           </Button>
 
-          {/* Logout button */}
           <Button colorScheme="red" onClick={handleLogout}>
             Logout
           </Button>

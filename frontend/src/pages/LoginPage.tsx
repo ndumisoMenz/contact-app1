@@ -9,6 +9,7 @@ import {
   VStack,
   useToast,
   Text,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/auth";
@@ -52,10 +53,16 @@ const LoginPage = () => {
       display="flex"
       alignItems="center"
       justifyContent="center"
-      bg="gray.100"
+      bg={useColorModeValue("gray.100", "gray.900")}
       p={4}
     >
-      <Box bg="white" p={8} rounded="lg" shadow="md" w="sm">
+      <Box
+        bg={useColorModeValue("white", "gray.700")}
+        p={8}
+        rounded="lg"
+        shadow="md"
+        w="sm"
+      >
         <Heading mb={6} textAlign="center">
           Login
         </Heading>

@@ -7,13 +7,18 @@ interface AuthState {
   token: string | null;
   role: string | null;
   login: (username: string, password: string) => Promise<void>;
-  register: (username: string, password: string, role: string) => Promise<void>;
+  register: (username: string, password: string) => Promise<void>;
   logout: () => void;
+  checkAuth: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   token: localStorage.getItem("token"),
-  role: localStorage.getItem("role"),
+  role: (() => {
+    const r = localStorage.getItem("role");
+    if (!r || r === "undefined" || r === "null") return null;
+    return r;
+  })(),
 
   login: async (username: string, password: string) => {
     try {
@@ -29,24 +34,28 @@ export const useAuthStore = create<AuthState>((set) => ({
         throw new Error(data.message || "Login failed");
       }
 
-      
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("role", data.role);
 
-      set({ token: data.token, role: data.role });
+      localStorage.setItem("token", data.token);
+      if (data.role) {
+        localStorage.setItem("role", data.role);
+      } else {
+        localStorage.removeItem("role");
+      }
+
+      set({ token: data.token, role: data.role || null });
     } catch (err) {
       console.error("Login error:", err);
       throw err;
     }
   },
 
-  
-  register: async (username: string, password: string, role: string) => {
+
+  register: async (username: string, password: string) => {
     try {
       const res = await fetch(`${API_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password, role }),
+        body: JSON.stringify({ username, password }),
       });
 
       const data = await res.json();
@@ -66,5 +75,30 @@ export const useAuthStore = create<AuthState>((set) => ({
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     set({ token: null, role: null });
+  },
+
+  checkAuth: async () => {
+    const { token } = useAuthStore.getState();
+    if (!token) return;
+
+    try {
+      const res = await fetch(`${API_URL}/api/auth/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        const newRole = data.role || null;
+        localStorage.setItem("role", newRole);
+        set({ role: newRole });
+      } else if (res.status === 401) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
+        set({ token: null, role: null });
+      }
+    } catch (err) {
+      console.error("Check auth error:", err);
+    }
   },
 }));

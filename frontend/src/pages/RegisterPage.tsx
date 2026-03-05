@@ -9,6 +9,7 @@ import {
   Heading,
   VStack,
   useToast,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/auth";
@@ -16,7 +17,6 @@ import { useAuthStore } from "../store/auth";
 const RegisterPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("user");
   const [loading, setLoading] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ const RegisterPage = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await register(username, password, role);
+      await register(username, password);
       toast({
         title: "Registration successful",
         description: "You can now log in",
@@ -55,10 +55,16 @@ const RegisterPage = () => {
       display="flex"
       alignItems="center"
       justifyContent="center"
-      bg="gray.100"
+      bg={useColorModeValue("gray.100", "gray.900")}
       p={4}
     >
-      <Box bg="white" p={8} rounded="lg" shadow="md" w="sm">
+      <Box
+        bg={useColorModeValue("white", "gray.700")}
+        p={8}
+        rounded="lg"
+        shadow="md"
+        w="sm"
+      >
         <Heading mb={6} textAlign="center">
           Register
         </Heading>
@@ -82,19 +88,6 @@ const RegisterPage = () => {
                 placeholder="Enter password"
               />
             </FormControl>
-
-            <FormControl isRequired>
-              <FormLabel>Role</FormLabel>
-              <Select
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                placeholder="Select role"
-              >
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
-              </Select>
-            </FormControl>
-
             <Button
               colorScheme="blue"
               type="submit"

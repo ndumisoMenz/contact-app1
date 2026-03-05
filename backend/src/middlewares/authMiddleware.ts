@@ -51,7 +51,7 @@ declare global {
     interface Request {
       user?: {
         id: string;
-        role: "admin" | "manager" | "user";
+        role: "admin" | "user";
       };
     }
   }
@@ -73,7 +73,7 @@ const authMiddleware = (
     const decoded = jwt.verify(
       token,
       process.env.JWT_SECRET as string
-    ) as { id: string; role: "admin" | "manager" | "user" };
+    ) as { id: string; role: "admin" | "user" };
 
     req.user = decoded;
     next();

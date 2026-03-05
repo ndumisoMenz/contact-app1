@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import verifyToken from "../middlewares/authMiddleware";
 import authorizeRoles from "../middlewares/roleMiddleware";
+import { getAllUsers, updateUserRole } from "../controllers/userController";
 
 const router = express.Router();
 
@@ -33,5 +34,9 @@ router.get(
     res.json({ message: "Welcome User" });
   }
 );
+
+// Admin Management Routes
+router.get("/", verifyToken, authorizeRoles("admin"), getAllUsers);
+router.patch("/:id/role", verifyToken, authorizeRoles("admin"), updateUserRole);
 
 export default router;
